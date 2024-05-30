@@ -1,0 +1,155 @@
+﻿@model ProfileViewModel
+@{
+    ViewData["Title"] = "Profile";
+}
+
+
+<section class="breadcrumb-section">
+    <h2 class="sr-only">Site Breadcrumb</h2>
+    <div class="container">
+        <div class="breadcrumb-contents">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                    <li class="breadcrumb-item active">My Account</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</section>
+<div class="page-section inner-page-sec-padding">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="row">
+                    <div class="col-lg-3 col-12">
+                        <div class="myaccount-tab-menu nav" role="tablist">
+                            <a href="#dashboad" class="@(ViewBag.Tab=="dashboard"?"active":"")" data-toggle="tab">
+                                <i class="fas fa-tachometer-alt"></i>
+                                Dashboard
+                            </a>
+                            <a href="#orders" class="@(ViewBag.Tab=="orders"?"active":"")" data-toggle="tab"><i class="fa fa-cart-arrow-down"></i> Orders</a>
+
+
+                            <a href="#account-info" class="@(ViewBag.Tab=="profile"?"active":"")" data-toggle="tab">
+                                <i class="fa fa-user"></i> Account
+                                Details
+                            </a>
+                            <a href="login-register.html"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                        </div>
+                    </div>
+                    <!-- My Account Tab Menu End -->
+                    <!-- My Account Tab Content Start -->
+                    <div class="col-lg-9 col-12 mt--30 mt-lg--0">
+                        <div class="tab-content" id="myaccountContent">
+                            <!-- Single Tab Content Start -->
+                            <div class="tab-pane fade @(ViewBag.Tab=="dashboard"?"show active":"")" id="dashboad" role="tabpanel">
+                                <div class="myaccount-content">
+                                    <h3>Dashboard</h3>
+                                    <div class="welcome mb-20">
+                                        <p>
+                                            Hello, <strong>Alex Tuntuni</strong> (If Not <strong>
+                                                Tuntuni
+                                                !
+                                            </strong><a href="login-register.html" class="logout">
+                                                Logout
+                                            </a>)
+                                        </p>
+                                    </div>
+                                    <p class="mb-0">
+                                        From your account dashboard. you can easily check &amp; view
+                                        your
+                                        recent orders, manage your shipping and billing addresses and edit your
+                                        password and account details.
+                                    </p>
+                                </div>
+                            </div>
+                            <!-- Single Tab Content End -->
+                            <!-- Single Tab Content Start -->
+                            <div class="tab-pane fade @(ViewBag.Tab=="orders"?"show active":"")" id="orders" role="tabpanel">
+                                @Html.Partial("_ProfileOrdersTablePartial", Model.Orders)
+                            </div>
+
+                            <!-- Single Tab Content End -->
+                            <!-- Single Tab Content Start -->
+                            <div class="tab-pane fade @(ViewBag.Tab == "profile" ? "show active" : "")" " id="account-info" role="tabpanel">
+                                <div class="myaccount-content">
+                                    <h3>Account Details</h3>
+                                    <div class="account-details-form">
+                                        @Html.Partial("_ProfileEditPartial", Model.ProfileEditVM)
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Single Tab Content End -->
+                            <div class="toast" id="profileToast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="3000" style="position: fixed; bottom: 30px; left: 20px; z-index: 9999;">
+                                <div class="toast-header">
+                                    <strong class="mr-auto">Success!</strong>
+                                    <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="toast-body">
+                                    Updated Successfully!
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade modal-quick-view" id="orderDetailModal" tabindex="-1" role="dialog"
+     aria-labelledby="orderDetailModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+    </div>
+</div>
+
+@section scripts {
+    @Html.Partial("_ValidationScriptsPartial");
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var profileForm = document.getElementById('profileForm');
+
+            profileForm.addEventListener('submit', function (event) {
+                event.preventDefault();
+
+                var formData = new FormData(profileForm);
+
+                fetch('@Url.Action("Profile", "Account")', {
+                    method: 'POST',
+                    body: formData
+                })
+                    .then(function (response) {
+                        if (response.ok) {
+                            showProfileToast();
+                            setTimeout(hideProfileToast, 5000); 
+                        } 
+                        else {
+                            console.error('Form submission failed with status: ' + response.status);
+                        }
+                    })
+                    .catch(function (error) {
+                        console.error('Error:', error);
+                    });
+            });
+        });
+
+        function showProfileToast() {
+            var profileToast = document.getElementById('profileToast');
+            if (profileToast) {
+                profileToast.classList.add('show');
+            }
+        }
+
+        function hideProfileToast() {
+            var profileToast = document.getElementById('profileToast');
+            if (profileToast) {
+                profileToast.classList.remove('show');
+            }
+        }
+    </script>   
+
+}

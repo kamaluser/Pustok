@@ -1,0 +1,117 @@
+﻿@model PaginatedList<Order>
+
+@{
+    int order = (Model.PageIndex - 1) * Model.PageSize;
+}
+
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Books</h1>
+    </div>
+    <div class="row">
+        <div class="col-md-12 mx-auto">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">FullName</th>
+                        <th scope="col">User</th>
+                        <th scope="col">OrderItem Count</th>
+                        <th scope="col">CreatedAt</th>
+                        <th scope="col">TotalPrice</th>
+                        <th scope="col">Benefit</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Detail</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var item in Model.Items)
+                    {
+                        order++;
+                        <tr>
+                            <th scope="row">@order</th>
+                            <td>@item.FullName</td>
+                            <td>@item.AppUser</td>
+                            <td>@item.OrderItems.Count()</td>
+                            <td>@item.CreatedAt.ToString("MMM dd, yyyy hh:mm")</td>
+                            <td>@(item.OrderItems.Sum(x => x.Count * (x.DiscountPercent > 0 ? x.SalePrice * (100 - x.DiscountPercent) / 100 : x.SalePrice)).ToString("0.00"))</td>
+                            <td>@((item.OrderItems.Sum(x => x.Count * (x.DiscountPercent > 0 ? x.SalePrice * (100 - x.DiscountPercent) / 100 : x.SalePrice)) - item.OrderItems.Sum(x => x.Count * x.CostPrice)).ToString("0.00"))</td>
+                            <td>
+                                @{
+
+                                    if (item.Status == Pustok_MVC.Models.Enums.OrderStatus.Accepted)
+                                    {
+                                        <span style="padding:10px" class="badge badge-pill badge-secondary">Accepted</span>
+                                    }
+                                    else if (item.Status == Pustok_MVC.Models.Enums.OrderStatus.Pending)
+                                    {
+                                        <span style="padding:10px" class="badge badge-pill badge-info">Pending</span>
+                                    }
+                                    else
+                                    {
+                                        <span style="padding:10px" class="badge badge-pill badge-danger">@(item.Status == Pustok_MVC.Models.Enums.OrderStatus.Rejected ? "User rejected" : "Admin rejected")</span>
+                                    }
+                                }
+                            </td>
+                                <td>
+                                    <a class="btn btn-warning" asp-action="detail" asp-route-id="@item.Id">Detail</a>
+                                </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <nav aria-label="..." class="d-flex justify-content-center">
+                <ul class="pagination">
+
+                    @if (Model.PageIndex > 1)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" asp-route-page="@(Model.PageIndex-1)">Previous</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="page-item disabled">
+                            <span class="page-link">Previous</span>
+                        </li>
+                    }
+
+                    @for (int i = Math.Max(1, Model.PageIndex - 1); i <= Math.Min(Model.TotalPages, Model.PageIndex + 1); i++)
+                    {
+                        if (Model.PageIndex == i)
+                        {
+                            <li class="page-item active" aria-current="page">
+                                <span class="page-link">@i</span>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="page-item"><a class="page-link" asp-route-page="@i">@i</a></li>
+                        }
+                    }
+
+                    @if (Model.PageIndex < Model.TotalPages)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" asp-route-page="@(Model.PageIndex+1)">Next</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="page-item disabled">
+                            <span class="page-link">Next</span>
+                        </li>
+                    }
+                </ul>
+            </nav>
+
+        </div>
+    </div>
+
+</div>

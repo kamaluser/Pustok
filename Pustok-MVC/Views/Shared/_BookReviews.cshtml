@@ -1,0 +1,22 @@
+﻿@model List<BookReview>
+
+@foreach (var review in Model)
+{
+    
+    <div class="review-comment mb--20">
+        <div class="text">
+            <div class="rating-block mb--15">
+                @for (int i = 1; i <= 5; i++)
+                {
+                    <span class="ion-android-star-outline @(i<=review.Rate?"star_on":"")"></span>
+                }
+            </div>
+            <h6 class="author">
+                @review.AppUser.Fullname – <span class="font-weight-400">@review.CreatedAt.ToString("dd MMMM, yyyy")</span>
+            </h6>
+            <p>
+                @review.Text
+            </p>
+        </div>
+    </div>
+}

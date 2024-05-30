@@ -1,0 +1,26 @@
+﻿@model Author
+@{
+    ViewData["Title"] = "Create";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h1>Author Create</h1>
+        </div>
+        <div class="col-md-8">
+            <form method="post" asp-action="Create">
+                <div class="form-group">
+                    <label asp-for="Fullname">FullName</label>
+                    <input asp-for="Fullname" class="form-control" placeholder="Fullname">
+                    <span asp-validation-for="Fullname"></span>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    @Html.Partial("_ValidationScriptsPartial");
+}

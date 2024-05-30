@@ -1,0 +1,8 @@
+﻿.remove-img-icon {
+    cursor: pointer;
+    color: red;
+    position: absolute;
+    right: -9px;
+    top: -22px;
+    font-size: 28px;
+}

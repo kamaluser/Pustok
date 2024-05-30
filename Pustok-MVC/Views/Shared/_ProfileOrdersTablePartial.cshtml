@@ -1,0 +1,45 @@
+﻿@model List<Order>
+@{
+    int order = 0;
+}
+<table class="table table-bordered">
+    <thead class="thead-light">
+        <tr>
+            <th>No</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Total</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+                order++;
+                <tr>
+                    <td>@order</td>
+                    <td>@item.CreatedAt.ToString("MMM dd, yyyy hh:mm")</td>
+                    <td>@item.Status</td>
+                    <td>$@item.OrderItems.Sum(oi => oi.Count * (oi.DiscountPercent>0?oi.SalePrice*(100-oi.DiscountPercent)/100:oi.SalePrice)).ToString("0.00")</td>
+                    <td>
+                        <a href="@Url.Action("getorderitems","order",new{orderId=item.Id})" style="padding:0 8px" class="btn">View</a>
+                        @if(item.Status == Pustok_MVC.Models.Enums.OrderStatus.Pending){
+                            <span>|</span>
+
+                            <a href="@Url.Action("cancel","order",new{id=item.Id})" style="padding:0 8px" class="btn">Cancel</a>
+                        }
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="6">No orders found.</td>
+            </tr>
+        }
+
+    </tbody>
+</table>

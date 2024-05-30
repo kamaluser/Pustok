@@ -1,0 +1,386 @@
+﻿@model ShopViewModel
+@{
+    ViewData["Title"] = "Index";
+    List<int> authorIds = ViewBag.AuthorIds??new List<int>();
+}
+
+<section class="breadcrumb-section">
+    <h2 class="sr-only">Site Breadcrumb</h2>
+    <div class="container">
+        <div class="breadcrumb-contents">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                    <li class="breadcrumb-item active">Shop</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</section>
+<main class="inner-page-sec-padding-bottom">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-9 order-lg-2">
+                <div class="shop-toolbar with-sidebar mb--30">
+                    <div class="row align-items-center">
+                        <div class="col-lg-2 col-md-2 col-sm-6">
+                            <!-- Product View Mode -->
+                            <div class="product-view-mode">
+                                <a href="#" class="sorting-btn active" data-target="grid">
+                                    <i class="fas fa-th"></i>
+                                </a>
+                                <a href="#" class="sorting-btn" data-target="grid-four">
+                                    <span class="grid-four-icon">
+                                        <i class="fas fa-grip-vertical"></i><i class="fas fa-grip-vertical"></i>
+                                    </span>
+                                </a>
+                                <a href="#" class="sorting-btn" data-target="list ">
+                                    <i class="fas fa-list"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-md-4 col-sm-6  mt--10 mt-sm--0">
+                            <span class="toolbar-status">
+                                Showing 1 to 9 of 14 (2 Pages)
+                            </span>
+                        </div>
+                        <div class="col-lg-2 col-md-2 col-sm-6  mt--10 mt-md--0">
+                            <div class="sorting-selection">
+                                <span>Show:</span>
+                                <select class="form-control nice-select sort-select">
+                                    <option value="" selected="selected">3</option>
+                                    <option value="">9</option>
+                                    <option value="">5</option>
+                                    <option value="">10</option>
+                                    <option value="">12</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-6 mt--10 mt-md--0 ">
+                            <div class="sorting-selection">
+                                <span>Sort By:</span>
+                                <select onchange="this.form.submit()" form="filterForm" name="sort" class="form-control nice-select sort-select mr-0" asp-items="ViewBag.SortItems">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="shop-toolbar d-none">
+                    <div class="row align-items-center">
+                        <div class="col-lg-2 col-md-2 col-sm-6">
+                            <!-- Product View Mode -->
+                            <div class="product-view-mode">
+                                <a href="#" class="sorting-btn active" data-target="grid">
+                                    <i class="fas fa-th"></i>
+                                </a>
+                                <a href="#" class="sorting-btn" data-target="grid-four">
+                                    <span class="grid-four-icon">
+                                        <i class="fas fa-grip-vertical"></i><i class="fas fa-grip-vertical"></i>
+                                    </span>
+                                </a>
+                                <a href="#" class="sorting-btn" data-target="list ">
+                                    <i class="fas fa-list"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-xl-5 col-md-4 col-sm-6  mt--10 mt-sm--0">
+                            <span class="toolbar-status">
+                                Showing 1 to 9 of 14 (2 Pages)
+                            </span>
+                        </div>
+                        <div class="col-lg-2 col-md-2 col-sm-6  mt--10 mt-md--0">
+                            <div class="sorting-selection">
+                                <span>Show:</span>
+                                <select class="form-control nice-select sort-select">
+                                    <option value="" selected="selected">3</option>
+                                    <option value="">9</option>
+                                    <option value="">5</option>
+                                    <option value="">10</option>
+                                    <option value="">12</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-lg-4 col-md-4 col-sm-6 mt--10 mt-md--0 ">
+                            <div class="sorting-selection">
+                                <span>Sort By:</span>
+                                <select class="form-control nice-select sort-select mr-0">
+                                    <option value="" selected="selected">Default Sorting</option>
+                                    <option value="">
+                                        Sort
+                                        By:Name (A - Z)
+                                    </option>
+                                    <option value="">
+                                        Sort
+                                        By:Name (Z - A)
+                                    </option>
+                                    <option value="">
+                                        Sort
+                                        By:Price (Low &gt; High)
+                                    </option>
+                                    <option value="">
+                                        Sort
+                                        By:Price (High &gt; Low)
+                                    </option>
+                                    <option value="">
+                                        Sort
+                                        By:Rating (Highest)
+                                    </option>
+                                    <option value="">
+                                        Sort
+                                        By:Rating (Lowest)
+                                    </option>
+                                    <option value="">
+                                        Sort
+                                        By:Model (A - Z)
+                                    </option>
+                                    <option value="">
+                                        Sort
+                                        By:Model (Z - A)
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="shop-product-wrap grid with-pagination row space-db--30 shop-border">
+                    @foreach (var item in Model.Books)
+                    {
+                        <div class="col-lg-4 col-sm-6">
+                            <div class="product-card">
+                                <div class="product-grid-content">
+                                    <div class="product-header">
+                                        <a href="#" class="author">
+                                            @item.Author.Fullname
+                                        </a>
+                                        <h3><a href="product-details.html">@item.Name</a></h3>
+                                    </div>
+                                    <div class="product-card--body">
+                                        <div class="card-image">
+                                            <img src="~/image/products/@item.BookImages.FirstOrDefault(x=>x.PosterStatus==true)?.Name" alt="">
+                                            <div class="hover-contents">
+                                                <a href="product-details.html" class="hover-image">
+                                                    <img src="~/image/products/@item.BookImages.FirstOrDefault(x=>x.PosterStatus==false)?.Name" alt="">
+                                                </a>
+                                                <div class="hover-btns">
+                                                    <a asp-controller="book" asp-action="addtobasket" asp-route-bookId="@item.Id" class="single-btn add-to-basket">
+                                                        <i class="fas fa-shopping-basket"></i>
+                                                    </a>
+                                                    <a href="wishlist.html" class="single-btn">
+                                                        <i class="fas fa-heart"></i>
+                                                    </a>
+                                                    <a href="compare.html" class="single-btn">
+                                                        <i class="fas fa-random"></i>
+                                                    </a>
+                                                    <a asp-controller="book" asp-action="getbookbyid" asp-route-id="@item.Id"
+                                                       class="single-btn book-modal">
+                                                        <i class="fas fa-eye"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="price-block">
+                                            @if (item.DiscountPercent > 0)
+                                            {
+
+                                                <span class="price">£@((item.SalePrice * (100 - item.DiscountPercent) / 100).ToString("0.00"))</span>
+                                                <del class="price-old">£@item.SalePrice.ToString("0.00")</del>
+                                                <span class="price-discount">@item.DiscountPercent.ToString("0.##")%</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="price">£@item.SalePrice.ToString("0.00")</span>
+                                            }
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="product-list-content">
+                                    <div class="card-image">
+                                        <img src="image/products/product-3.jpg" alt="">
+                                    </div>
+                                    <div class="product-card--body">
+                                        <div class="product-header">
+                                            <a href="#" class="author">
+                                                @item.Author.Fullname
+                                            </a>
+                                            <h3>
+                                                <a href="product-details.html" tabindex="0">
+                                                    @item.Name
+                                                </a>
+                                            </h3>
+                                        </div>
+                                        <article>
+                                            <h2 class="sr-only">Card List Article</h2>
+                                            <p>
+                                                @item.Desc
+                                            </p>
+                                        </article>
+                                        <div class="price-block">
+                                            @if (item.DiscountPercent > 0)
+                                            {
+
+                                                <span class="price">£@((item.SalePrice * (100 - item.DiscountPercent) / 100).ToString("0.00"))</span>
+                                                <del class="price-old">£@item.SalePrice.ToString("0.00")</del>
+                                                <span class="price-discount">@item.DiscountPercent.ToString("0.##")%</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="price">£@item.SalePrice.ToString("0.00")</span>
+                                            }
+
+                                        </div>
+                                        <div class="rating-block">
+                                            <span class="fas fa-star star_on"></span>
+                                            <span class="fas fa-star star_on"></span>
+                                            <span class="fas fa-star star_on"></span>
+                                            <span class="fas fa-star star_on"></span>
+                                            <span class="fas fa-star "></span>
+                                        </div>
+                                        <div class="btn-block">
+                                            <a href="#" class="btn btn-outlined">Add To Cart</a>
+                                            <a href="#" class="card-link">
+                                                <i class="fas fa-heart"></i> Add To
+                                                Wishlist
+                                            </a>
+                                            <a href="#" class="card-link">
+                                                <i class="fas fa-random"></i> Add To
+                                                Cart
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <!-- Pagination Block -->
+                @if (Model.TotalPages > 1)
+                {
+                    <nav aria-label="Page navigation" style="margin-top: 30px;">
+                        <ul class="pagination justify-content-center">
+                            @if (Model.CurrentPage > 1)
+                            {
+                                <li class="page-item">
+                                    <a class="page-link" href="@Url.Action("Index", new { page = Model.CurrentPage - 1 })">Previous</a>
+                                </li>
+                            }
+
+                            @for (int i = 1; i <= Model.TotalPages; i++)
+                            {
+                                if (i == Model.CurrentPage)
+                                {
+                                    <li class="page-item active">
+                                        <span class="page-link">@i</span>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="page-item">
+                                        <a class="page-link" href="@Url.Action("Index", new { page = i })">@i</a>
+                                    </li>
+                                }
+                            }
+
+                            @if (Model.CurrentPage < Model.TotalPages)
+                            {
+                                <li class="page-item">
+                                    <a class="page-link" href="@Url.Action("Index", new { page = Model.CurrentPage + 1 })">Next</a>
+                                </li>
+                            }
+                        </ul>
+                    </nav>
+                }
+
+            </div>
+            <div class="col-lg-3  mt--40 mt-lg--0">
+                <div class="inner-page-sidebar">
+                    <!-- Accordion -->
+                    <div class="single-block">
+                        <h3 class="sidebar-title">Genres</h3>
+                        <ul class="sidebar-menu--shop">
+                            @foreach (var item in Model.Genres)
+                            {
+                                <li>
+                                    <div class="form-check">
+                                        <input form="filterForm" class="form-check-input" type="radio" name="genreId" id="genre-@item.Id" value="@item.Id" @(ViewBag.GenreId == item.Id ? "checked" : "")>
+                                        <label class="form-check-label" for="genre-@item.Id">
+                                            @item.Name
+                                        </label>
+                                    </div>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                    <!-- Price -->
+                    <div class="single-block">
+                        <h3 class="sidebar-title">Fillter By Price</h3>
+                        <div class="range-slider pt--30">
+                            <div class="sb-range-slider"></div>
+                            <div class="slider-price">
+                                <p>
+                                    <input type="text" id="amount" readonly="">
+                                </p>
+                                <input form="filterForm" type="hidden" id="minPriceInput" name="minPrice" value="@ViewBag.SelectedMinPrice.ToString("0.00")" />
+                                <input form="filterForm" type="hidden" id="maxPriceInput" name="maxPrice" value="@ViewBag.SelectedMaxPrice.ToString("0.00")" />
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Size -->
+                    <div class="single-block">
+                        <h3 class="sidebar-title">Authors</h3>
+                        <ul class="sidebar-menu--shop menu-type-2">
+                            @foreach (var item in Model.Authors)
+                            {
+                                <li>
+                                    <div class="form-check">
+                                        <input form="filterForm" class="form-check-input" type="checkbox" name="authorIds" id="authorId-@item.Id" value="@item.Id" @(authorIds.Contains(item.Id) ? "checked" : "")>
+                                        <label class="form-check-label" for="authorId-@item.Id">
+                                            @item.Fullname
+                                        </label>
+                                    </div>
+                                </li>
+
+                            }
+                        </ul>
+                    </div>
+                    <div class="single-block">
+                        <form method="get" id="filterForm">
+                            <button  type="submit" class="sidebar-title w-100">Filter</button>
+                        </form>
+                    </div>
+
+                    <!-- Promotion Block -->
+                    <div class="single-block">
+                        <a href="#" class="promo-image sidebar">
+                            <img src="image/others/home-side-promo.jpg" alt="">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+@section scripts{
+    <script>
+        /*-------------------------------------
+          --> Range Slider
+        ---------------------------------------*/
+        $(function () {
+            $(".sb-range-slider").slider({
+                range: true,
+                min: @ViewBag.MinPrice,
+                max: @ViewBag.MaxPrice,
+                values: [@ViewBag.SelectedMinPrice, @ViewBag.SelectedMaxPrice],
+                slide: function (event, ui) {
+                    $("#amount").val("£" + ui.values[0] + " - £" + ui.values[1]);
+                    $("#minPriceInput").val(ui.values[0])
+                    $("#maxPriceInput").val(ui.values[1])
+                }
+            });
+            $("#amount").val("£" + $(".sb-range-slider").slider("values", 0) +
+                " - £" + $(".sb-range-slider").slider("values", 1));
+        });
+    </script>
+}

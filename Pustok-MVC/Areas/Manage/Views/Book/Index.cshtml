@@ -1,0 +1,106 @@
+﻿@model PaginatedList<Book>
+
+@{
+    int order = (Model.PageIndex - 1) * Model.PageSize;
+}
+
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Books</h1>
+        <a class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" asp-action="Create">Create New</a>
+    </div>
+    <div class="row">
+        <div class="col-md-12 mx-auto">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Author</th>
+                        <th scope="col">Genre</th>
+                        <th scope="col">SalePrice</th>
+                        <th scope="col">CostPrice</th>
+                        <th scope="col">Discount</th>
+                        <th scope="col">Poster Image</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var item in Model.Items)
+                    {
+                        order++;
+                        <tr>
+                            <th scope="row">@order</th>
+                            <td>@item.Name</td>
+                            <td>@item.Author?.Fullname</td>
+                            <td>@item.Genre?.Name</td>
+                            <td>@item.SalePrice.ToString("0.00")</td>
+                            <td>@item.CostPrice.ToString("0.00")</td>
+                            <td>@item.DiscountPercent.ToString("0.##")%</td>
+                            <td>
+                                <img width="150" src="~/manage/uploads/books/@item.BookImages.FirstOrDefault()?.Name" />
+                            </td>
+                            <td>
+                                <a class="btn btn-warning" asp-action="edit" asp-route-id="@item.Id">Edit</a>
+                                <a class="btn btn-danger" asp-action="delete" asp-route-id="@item.Id">Delete</a>
+                                <a class="btn btn-primary" asp-action="bookReview" asp-route-id="@item.Id">Review</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <nav aria-label="..." class="d-flex justify-content-center">
+                <ul class="pagination">
+
+                    @if (Model.PageIndex > 1)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" asp-route-page="@(Model.PageIndex-1)">Previous</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="page-item disabled">
+                            <span class="page-link">Previous</span>
+                        </li>
+                    }
+
+                    @for (int i = Math.Max(1, Model.PageIndex - 1); i <= Math.Min(Model.TotalPages, Model.PageIndex + 1); i++)
+                    {
+                        if (Model.PageIndex == i)
+                        {
+                            <li class="page-item active" aria-current="page">
+                                <span class="page-link">@i</span>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="page-item"><a class="page-link" asp-route-page="@i">@i</a></li>
+                        }
+                    }
+
+                    @if (Model.PageIndex < Model.TotalPages)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" asp-route-page="@(Model.PageIndex+1)">Next</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="page-item disabled">
+                            <span class="page-link">Next</span>
+                        </li>
+                    }
+                </ul>
+            </nav>
+
+        </div>
+    </div>
+
+</div>

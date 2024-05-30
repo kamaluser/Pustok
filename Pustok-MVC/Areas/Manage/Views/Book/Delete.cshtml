@@ -1,0 +1,55 @@
+﻿@model Book
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Books</h1>
+        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+            Edit
+        </a>
+    </div>
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card" style="width: 100%;">
+               
+                <div class="card-body">
+                    <h5 class="card-title">Book: @Model.Name</h5>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Author: @Model.Author.Fullname</li>
+                    <li class="list-group-item">Genre: @Model.Genre.Name</li>
+                    <li class="list-group-item">Tags: @String.Join(',', Model.BookTags.Select(x=>x.Tag.Name).ToList())</li>
+                    <li class="list-group-item">SalePrice: @Model.SalePrice</li>
+                    <li class="list-group-item">CostPrice: @Model.CostPrice</li>
+                    <li class="list-group-item">DiscountPercent: @Model.DiscountPercent%</li>
+                    <li class="list-group-item">StockStatus: @Model.StockStatus</li>
+                    <li class="list-group-item">Featured: @Model.IsFeatured</li>
+                    <li class="list-group-item">New: @Model.IsNew</li>
+                    <li class="list-group-item">BookImages:</br>
+                        <div>
+                            @foreach (var item in Model.BookImages)
+                            {
+                                <img width="200" style="display:inline-block" src="~/manage/uploads/books/@item.Name">
+                            }
+                        </div>
+                    </li>
+                </ul>
+                <div class="card-body">
+                    <form method="post">
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                        <a asp-action="index" class="btn btn-primary">Go back</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    @Html.Partial("_ValidationScriptsPartial");
+}
